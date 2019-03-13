@@ -2,6 +2,8 @@
 
 const Hapi = require("hapi");
 const Good = require("good");
+const Vision = require("vision");
+const Handlebars = require("handlebars");
 
 const server = Hapi.server({
   port: 3000,
@@ -71,8 +73,21 @@ const init = async () => {
     },
     {
       plugin: require("./base-route")
+    },
+    {
+      plugin: require("vision") // add template rendering support in hapi
     }
   ]);
+
+  // configure template support
+  server.views({
+    engines: {
+      html: Handlebars
+    },
+    path: __dirname + "/views",
+    layout: "layout"
+  });
+
   await server.start();
   server.log("info", `Server running at: ${server.info.uri}`);
 };

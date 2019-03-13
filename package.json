@@ -14,8 +14,10 @@
     "good": "^8.1.2",
     "good-console": "^8.0.0",
     "good-squeeze": "^5.1.0",
+    "handlebars": "^4.1.0",
     "hapi": "^17.8.4",
-    "inert": "^5.1.2"
+    "inert": "^5.1.2",
+    "vision": "^5.4.4"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
