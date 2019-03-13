@@ -8,30 +8,30 @@ const server = Hapi.server({
   host: "localhost"
 });
 
-// Routes
-server.route([
-  {
-    method: "GET",
-    path: "/",
-    handler: (request, h) => {
-      return "Hello World!";
-    },
-    // the config option doesnt effect the routes functionality, but is helpful and valuable when generating the apps documentation or bringing new developers on board.
-    config: {
-      description: "Sends a friendly greeting!",
-      notes: "No route parameters available",
-      tags: ["greeting"]
-    }
-  },
-  {
-    method: "POST",
-    path: "/",
-    handler: (request, h) => {
-      // Process the request's payload
-      return "Created a new instance";
-    }
-  }
-]);
+// // Routes
+// server.route([
+//   {
+//     method: "GET",
+//     path: "/",
+//     handler: (request, h) => {
+//       return "Hello World!";
+//     },
+//     // the config option doesnt effect the routes functionality, but is helpful and valuable when generating the apps documentation or bringing new developers on board.
+//     config: {
+//       description: "Sends a friendly greeting!",
+//       notes: "No route parameters available",
+//       tags: ["greeting"]
+//     }
+//   },
+//   {
+//     method: "POST",
+//     path: "/",
+//     handler: (request, h) => {
+//       // Process the request's payload
+//       return "Created a new instance";
+//     }
+//   }
+// ]);
 
 server.route({
   method: "GET",
@@ -64,10 +64,15 @@ const options = {
 };
 
 const init = async () => {
-  await server.register({
-    plugin: require("good"),
-    options
-  });
+  await server.register([
+    {
+      plugin: require("good"),
+      options
+    },
+    {
+      plugin: require("./base-route")
+    }
+  ]);
   await server.start();
   server.log("info", `Server running at: ${server.info.uri}`);
 };
