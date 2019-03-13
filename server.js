@@ -1,6 +1,7 @@
 "use strict";
 
 const Hapi = require("hapi");
+const Good = require("good");
 
 const server = Hapi.server({
   port: 3000,
@@ -43,13 +44,36 @@ server.route({
   }
 });
 
+const options = {
+  ops: {
+    interval: 1000
+  },
+  reporters: {
+    myConsoleReporter: [
+      {
+        module: "good-squeeze",
+        name: "Squeeze",
+        args: [{ log: "*", response: "*" }]
+      },
+      {
+        module: "good-console"
+      },
+      "stdout"
+    ]
+  }
+};
+
 const init = async () => {
+  await server.register({
+    plugin: require("good"),
+    options
+  });
   await server.start();
-  console.log(`Server running at: ${server.info.uri}`);
+  server.log("info", `Server running at: ${server.info.uri}`);
 };
 
 process.on("unhandledRejection", err => {
-  console.log(err);
+  server.log(err);
   process.exit(1);
 });
 
