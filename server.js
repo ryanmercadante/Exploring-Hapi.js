@@ -4,36 +4,29 @@ const Hapi = require("hapi");
 const Good = require("good");
 const Vision = require("vision");
 const Handlebars = require("handlebars");
+const path = require("path");
 
 const server = Hapi.server({
   port: 3000,
   host: "localhost"
 });
 
-// // Routes
-// server.route([
-//   {
-//     method: "GET",
-//     path: "/",
-//     handler: (request, h) => {
-//       return "Hello World!";
-//     },
-//     // the config option doesnt effect the routes functionality, but is helpful and valuable when generating the apps documentation or bringing new developers on board.
-//     config: {
-//       description: "Sends a friendly greeting!",
-//       notes: "No route parameters available",
-//       tags: ["greeting"]
-//     }
-//   },
-//   {
-//     method: "POST",
-//     path: "/",
-//     handler: (request, h) => {
-//       // Process the request's payload
-//       return "Created a new instance";
-//     }
-//   }
-// ]);
+// Routes
+server.route([
+  {
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return h.view("index", { title: "Home Page" });
+    },
+    // the config option doesnt effect the routes functionality, but is helpful and valuable when generating the apps documentation or bringing new developers on board.
+    config: {
+      description: "Sends a friendly greeting!",
+      notes: "No route parameters available",
+      tags: ["greeting"]
+    }
+  }
+]);
 
 server.route({
   method: "GET",
@@ -71,9 +64,9 @@ const init = async () => {
       plugin: require("good"),
       options
     },
-    {
-      plugin: require("./base-route")
-    },
+    // {
+    //   plugin: require("./base-route")
+    // },
     {
       plugin: require("vision") // add template rendering support in hapi
     }
@@ -82,10 +75,10 @@ const init = async () => {
   // configure template support
   server.views({
     engines: {
-      html: Handlebars
+      html: require("handlebars")
     },
-    path: __dirname + "/views",
-    layout: "layout"
+    relativeTo: __dirname,
+    path: "views"
   });
 
   await server.start();
